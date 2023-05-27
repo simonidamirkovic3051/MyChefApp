@@ -60,6 +60,24 @@ public class RecipeController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/favorites")
+    public ResponseEntity<?> findFavorites() {
+        List<Recipe> favorites = recipeService.findFavorites(getLoggedInUser());
+        return ResponseEntity.ok(favorites);
+    }
+
+    @PostMapping("/favorites/{id}")
+    public ResponseEntity<?> addToFavorites(@PathVariable Long id) {
+        Recipe recipe = recipeService.addToFavorites(getLoggedInUser(), id);
+        return ResponseEntity.ok(recipe);
+    }
+
+    @DeleteMapping("/favorites/{id}")
+    public ResponseEntity<?> removeFromFavorites(@PathVariable Long id) {
+        recipeService.removeFromFavorites(getLoggedInUser(), id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/add-comment")
     public ResponseEntity<?> addComment(@Valid @RequestBody AddCommentRequest request) {
         Comment comment = recipeService.addComment(request, getLoggedInUser());
