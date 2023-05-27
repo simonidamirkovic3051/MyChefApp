@@ -60,6 +60,12 @@ public class RecipeController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/add-comment")
+    public ResponseEntity<?> addComment(@Valid @RequestBody AddCommentRequest request) {
+        Comment comment = recipeService.addComment(request, getLoggedInUser());
+        return ResponseEntity.ok(comment);
+    }
+
     private User getLoggedInUser() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         return userService.findOne(loggedInUser.getName());
