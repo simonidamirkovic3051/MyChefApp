@@ -30,6 +30,20 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
+
+        String jwt = jwtUtil.generateToken(loginRequest.getUsername());
+
+        return ResponseEntity.ok(new LoginResponse(jwt));
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
         User user = userService.create(registerUserRequest);
